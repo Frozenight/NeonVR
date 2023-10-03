@@ -18,13 +18,20 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Rigidbody leftHandRb;
     [SerializeField] private Rigidbody rightHandRb;
 
+    [SerializeField] private GameObject[] glovesRb;
+
+    private void Start()
+    {
+        //Invoke("EquipRightGlove", 5);
+    }
+
     public void EquipRightGlove()
     {
         rightHand.SetActive(false);
         rightGlove.SetActive(true);
         rightGloveObj.SetActive(false);
         rightInteractor.enabled = false;
-        rightHandRb.mass = 50;
+        ActivateGloveMode(true);
     }
 
     public void EquipLeftGlove()
@@ -33,6 +40,16 @@ public class WeaponManager : MonoBehaviour
         leftGlove.SetActive(true);
         leftGloveObj.SetActive(false);
         leftInteractor.enabled = false;
-        leftHandRb.mass = 50;
+        ActivateGloveMode(true);
+    }
+
+    private void ActivateGloveMode(bool activate)
+    {
+        if (activate)
+            foreach (var item in glovesRb)
+                item.GetComponent<Rigidbody>().mass = 1;
+        else
+            foreach (var item in glovesRb)
+                item.GetComponent<Rigidbody>().mass = 10;
     }
 }
