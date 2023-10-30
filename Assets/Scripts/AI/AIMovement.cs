@@ -50,7 +50,7 @@ public class AIMovement : MonoBehaviour
     {
         if (_isDead)
             return;
-        Debug.Log("De");
+
         //transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
@@ -84,6 +84,19 @@ public class AIMovement : MonoBehaviour
         if (Physics.Raycast(movePoint, -transform.up, 2f, whatIsGround))
             movePointSet = true;
     }
+
+    public void getBlasted(float blastForce, Vector3 explosionPosition, float blastRadius, float upwardModifier)
+    {
+        _isDead = true;
+        anim.enabled = false;
+        StartRagdoll();
+
+        foreach (Rigidbody rb in rigRigidbodies)
+        {
+            rb.AddExplosionForce(blastForce, explosionPosition, blastRadius, upwardModifier, ForceMode.Impulse);
+        }
+    }
+
     private void ChasePlayer()
     {
         agent.SetDestination(player.position);
