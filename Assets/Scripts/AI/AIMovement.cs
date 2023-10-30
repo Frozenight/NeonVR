@@ -26,23 +26,19 @@ public class AIMovement : MonoBehaviour
     {
         if (_isDead)
             return;
-        Debug.Log("De");
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void getBlasted(float blastForce, Vector3 explosionPosition, float blastRadius, float upwardModifier)
     {
-        if (other.CompareTag("Bullet"))
-        {
-            _isDead = true;
-            anim.enabled = false;
-            StartRag();
-        }
-    }
-
-    private void StartRag()
-    {
+        _isDead = true;
+        anim.enabled = false;
         StartRagdoll();
+
+        foreach (Rigidbody rb in rigRigidbodies)
+        {
+            rb.AddExplosionForce(blastForce, explosionPosition, blastRadius, upwardModifier, ForceMode.Impulse);
+        }
     }
 
     private void StartRagdoll()

@@ -8,8 +8,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private EmissionChanger[] changers;
     [SerializeField] private float transitionDuration;
     [SerializeField] private GameObject chargeVFX;
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
+
+    [SerializeField] private BulletImpact effectObject;
     private float endScale = 0.05f;
 
     private float elapsedTime = 0f;
@@ -22,13 +24,13 @@ public class Gun : MonoBehaviour
     {
         chargeVFX.SetActive(false);
         LoadWeapon();
+        Invoke("Shoot", 8);
     }
 
     public void Shoot()
     {
         if (!_canShoot)
             return;
-
         ShootBullet();
         _canShoot = false;
         indicationMat.color = Color.red;
@@ -39,10 +41,11 @@ public class Gun : MonoBehaviour
     private void ShootBullet()
     {
         // Instantiate a bullet at the bulletSpawnPoint's position and rotation
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+        Bullet bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
 
         // Add force to shoot the bullet forward (you may need to adjust the force value)
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+        bullet.blastOffEffectObj = effectObject;
         if (bulletRigidbody != null)
         {
             bulletRigidbody.AddForce(bulletSpawnPoint.forward * 10f, ForceMode.Impulse); // Adjust the force as needed
