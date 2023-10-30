@@ -24,7 +24,7 @@ public class Gun : MonoBehaviour
     {
         chargeVFX.SetActive(false);
         LoadWeapon();
-        Invoke("Shoot", 8);
+        //Invoke("Shoot", 8);
     }
 
     public void Shoot()

@@ -15,8 +15,15 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Gun"))
             return;
-        Instantiate(blastOffEffectObj, transform.position, Quaternion.identity);
-        blastOffEffectObj.TriggerEffect();
+        if (blastOffEffectObj != null)
+        {
+            Instantiate(blastOffEffectObj, transform.position, Quaternion.identity);
+            blastOffEffectObj.TriggerEffect();
+        }
+
+        if (collision.gameObject.CompareTag("Player"))
+            Debug.Log("Hit");
+
         Destroy(gameObject);
     }
 }

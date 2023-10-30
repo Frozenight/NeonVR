@@ -12,7 +12,6 @@ public class BlastOffEffect : BulletImpact
     // This function can be called when the grenade "explodes"
     public override void TriggerEffect()
     {
-        Debug.Log("BOOM!?");
         // Find all the colliders in the blast radius
         Collider[] colliders = Physics.OverlapSphere(transform.position, blastRadius, blastMask);
 
@@ -22,7 +21,6 @@ public class BlastOffEffect : BulletImpact
             AIMovement ai = nearbyObject.GetComponent<AIMovement>();
             if (rb != null)
             {
-                Debug.Log("Push: " + rb.gameObject.name);
                 // Add an explosion force to this object
                 rb.AddExplosionForce(blastForce, transform.position, blastRadius, upwardModifier, ForceMode.Impulse);
             }

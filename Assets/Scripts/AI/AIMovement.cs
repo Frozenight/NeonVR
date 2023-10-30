@@ -89,6 +89,7 @@ public class AIMovement : MonoBehaviour
     {
         _isDead = true;
         anim.enabled = false;
+        agent.enabled = false;
         StartRagdoll();
 
         foreach (Rigidbody rb in rigRigidbodies)
@@ -119,21 +120,6 @@ public class AIMovement : MonoBehaviour
     private void ResetAttack()
     {
         alreadyAttacked = false;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Bullet"))
-        {
-            _isDead = true;
-            anim.enabled = false;
-            StartRag();
-        }
-    }
-
-    private void StartRag()
-    {
-        StartRagdoll();
     }
 
     private void StartRagdoll()
