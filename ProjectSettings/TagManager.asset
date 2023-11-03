@@ -7,6 +7,7 @@ TagManager:
   - Anchor
   - Bullet
   - Gun
+  - Hand
   layers:
   - Default
   - TransparentFX

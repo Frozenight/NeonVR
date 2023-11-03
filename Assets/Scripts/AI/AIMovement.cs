@@ -41,7 +41,7 @@ public class AIMovement : MonoBehaviour
     }
     private void Awake()
     {
-        player = GameObject.Find("Complete XR Origin Set Up").transform;
+        player = FindFirstObjectByType<PlayerBody>().transform;
         gun = this.GetComponentInChildren<Gun>();
         agent = GetComponent<NavMeshAgent>();
     }
@@ -106,7 +106,8 @@ public class AIMovement : MonoBehaviour
     {
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        Vector3 playerPositionXZ = new Vector3(player.position.x, 0, player.position.z);
+        transform.LookAt(playerPositionXZ);
 
         if (!alreadyAttacked)
         {

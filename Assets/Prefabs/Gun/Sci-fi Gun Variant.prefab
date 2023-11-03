@@ -732,6 +732,7 @@ MonoBehaviour:
   chargeVFX: {fileID: 4249522297270338632}
   bulletPrefab: {fileID: -4179457688974021847, guid: 15242017c8cb89e498eec2a1ac1c1a4b, type: 3}
   bulletSpawnPoint: {fileID: 1670217790000195810}
+  bulletSpeed: 0.5
   effectObject: {fileID: 0}
 --- !u!1 &2944274919204986466
 GameObject:

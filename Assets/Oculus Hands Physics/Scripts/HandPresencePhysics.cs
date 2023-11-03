@@ -6,8 +6,10 @@ public class HandPresencePhysics : MonoBehaviour
 {
     public Transform target;
     private Rigidbody rb;
-    public Renderer nonPhysicalHand;
-    public float showNonPhysicalHandDistance = 0.05f;
+    public Renderer nonPhysicalHandRenderer;
+    public float showNonPhysicalHandDistance = 0.2f;
+    public float positionLerpRate = 100f;
+    public float rotationLerpRate = 100f;
     private Collider[] handColliders;
 
     // Start is called before the first frame update
@@ -16,6 +18,9 @@ public class HandPresencePhysics : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.maxAngularVelocity = 200;
         handColliders = GetComponentsInChildren<Collider>();
+
+        // Set the interpolation mode
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
     public void EnableHandCollider()
@@ -39,29 +44,22 @@ public class HandPresencePhysics : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
         float distance = Vector3.Distance(transform.position, target.position);
-
-        if (distance > showNonPhysicalHandDistance)
-        {
-            nonPhysicalHand.enabled = true;
-        }
-        else
-            nonPhysicalHand.enabled = false;
-
+        nonPhysicalHandRenderer.enabled = distance > showNonPhysicalHandDistance;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        rb.velocity = (target.position - transform.position) / Time.fixedDeltaTime;
+        Vector3 positionDelta = target.position - transform.position;
+        rb.velocity = positionDelta * positionLerpRate;
 
-        Quaternion rotationDifference = target.rotation * Quaternion.Inverse(transform.rotation);
-        rotationDifference.ToAngleAxis(out float angleInDegree, out Vector3 rotationAxis);
+        Quaternion rotationDelta = target.rotation * Quaternion.Inverse(transform.rotation);
+        rotationDelta.ToAngleAxis(out float angleInDegrees, out Vector3 rotationAxis);
+        rotationAxis.Normalize();
 
-        Vector3 rotationDIfferenceInDegrees = angleInDegree * rotationAxis;
-
-        rb.angularVelocity = (rotationDIfferenceInDegrees * Mathf.Deg2Rad / Time.fixedDeltaTime);
+        Vector3 rotationDifferenceInDegrees = angleInDegrees * rotationAxis;
+        rb.angularVelocity = (rotationDifferenceInDegrees * Mathf.Deg2Rad) * rotationLerpRate;
     }
 }
