@@ -18,7 +18,6 @@ public class BlastOffEffect : BulletImpact
             Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
             AIMovement ai = nearbyObject.GetComponent<AIMovement>();
             PlayerMovementController player = nearbyObject.GetComponent<PlayerMovementController>();
-            Debug.Log(nearbyObject.gameObject.name);
             if (rb != null)
             {
                 // Add an explosion force to this object

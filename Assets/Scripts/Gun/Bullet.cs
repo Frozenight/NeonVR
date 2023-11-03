@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Gun") || collision.gameObject.CompareTag("Hand"))
             return;
+
         if (blastOffEffectObj != null)
         {
             BulletImpact newBlastEffect = Instantiate(blastOffEffectObj, transform.position, Quaternion.identity);
@@ -26,7 +27,11 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.CompareTag("Gun") || other.gameObject.CompareTag("Hand"))
+            return;
+
         if (blastOffEffectObj != null)
+            if (blastOffEffectObj != null)
         {
             BulletImpact newBlastEffect = Instantiate(blastOffEffectObj, transform.position, Quaternion.identity);
             newBlastEffect.TriggerEffect();
