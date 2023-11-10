@@ -16,7 +16,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private float bulletSpeed = 0.5f;
     [SerializeField] private BulletImpact effectObject;
 
-    private float endScale = 0.05f;
+    private float endScale = 0.02f;
 
     private float elapsedTime = 0f;
 

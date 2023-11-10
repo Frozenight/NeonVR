@@ -29,7 +29,7 @@ public class AIMovement : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
-    public Gun gun;
+    public AIGun gun;
     void Start()
     {
         rigColliders = GetComponentsInChildren<Collider>();
@@ -42,7 +42,7 @@ public class AIMovement : MonoBehaviour
     private void Awake()
     {
         player = FindFirstObjectByType<PlayerBody>().transform;
-        gun = this.GetComponentInChildren<Gun>();
+        gun = this.GetComponentInChildren<AIGun>();
         agent = GetComponent<NavMeshAgent>();
     }
 

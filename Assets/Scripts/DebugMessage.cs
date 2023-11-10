@@ -12,15 +12,7 @@ public class DebugMessage : MonoBehaviour
     // Make sure there's only one UIManager instance - Singleton pattern
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional: Keep this object alive when loading new scenes
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     // Call this method to update the display text

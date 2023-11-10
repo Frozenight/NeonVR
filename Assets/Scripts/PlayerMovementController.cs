@@ -11,8 +11,15 @@ public class PlayerMovementController : MonoBehaviour
     public float upwardForce = 1.5f;
     public float upwardDuration = 0.5f; // Duration of the upward force
 
+    [Space(20)]
+    public bool respawn;
+    public float yRespawnDis;
+    public Vector3 respawnPoint;
+
     void Update()
     {
+        if (gameObject.transform.position.y < yRespawnDis)
+            gameObject.transform.position = respawnPoint;
         if (blastRemainingTime > 0)
         {
             Vector3 horizontalMovement = new Vector3(blastDirection.x, 0, blastDirection.z) * Time.deltaTime * blastForceMultiplier;
