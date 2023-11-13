@@ -24,16 +24,16 @@ public class AIGun : MonoBehaviour
         LoadWeapon();
     }
 
-    public void Shoot()
+    public void Shoot(Transform player)
     {
         if (!_canShoot)
             return;
-        ShootBullet();
+        ShootBullet(player);
         _canShoot = false;
         Invoke("LoadWeapon", reloadTime);
     }
 
-    private void ShootBullet()
+    private void ShootBullet(Transform player)
     {
         Bullet bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
 
@@ -41,7 +41,12 @@ public class AIGun : MonoBehaviour
         bullet.blastOffEffectObj = effectObject;
         if (bulletRigidbody != null)
         {
-            bulletRigidbody.AddForce(bulletSpawnPoint.forward * bulletSpeed, ForceMode.Impulse);
+            // Calculate the direction towards the player's feet
+            Vector3 feetPosition = new Vector3(player.position.x, bulletSpawnPoint.position.y, player.position.z);
+            Vector3 directionToFeet = (feetPosition - bulletSpawnPoint.position).normalized;
+
+            // Apply force in the direction of the feet
+            bulletRigidbody.AddForce(directionToFeet * bulletSpeed, ForceMode.Impulse);
         }
     }
 

@@ -119,11 +119,11 @@ public class AIMovement : MonoBehaviour
         anim.enabled = false;
         agent.enabled = false;
         StartRagdoll();
-
         foreach (Rigidbody rb in rigRigidbodies)
         {
             rb.AddExplosionForce(blastForce, explosionPosition, blastRadius, upwardModifier, ForceMode.Impulse);
         }
+        Destroy(gameObject, 5);
     }
 
     private void ChasePlayer()
@@ -133,14 +133,12 @@ public class AIMovement : MonoBehaviour
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-
-        Vector3 playerPositionXZ = new Vector3(player.position.x, 0, player.position.z);
-        transform.LookAt(playerPositionXZ);
+        transform.LookAt(player);
 
         if (!alreadyAttacked)
         {
             if(gun != null)
-            gun.Shoot();
+            gun.Shoot(player);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
