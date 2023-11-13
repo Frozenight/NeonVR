@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.29266033, g: 0.5214665, b: 0.79805374, a: 1}
+  m_IndirectSpecularColor: {r: 0.29269454, g: 0.52128565, b: 0.797529, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1254,6 +1254,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
+      propertyPath: sightAngle
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
       propertyPath: sightRange
       value: 50
       objectReference: {fileID: 0}
@@ -1270,12 +1274,20 @@ PrefabInstance:
       value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
+      propertyPath: movePointRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
       propertyPath: whatIsGround.m_Bits
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
       propertyPath: whatIsPlayer.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 2366814059624797569, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
+      propertyPath: patrollingPointRange
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6583071745387869922, guid: 33af4865341d20245a64a4f5df01dad8, type: 3}
       propertyPath: m_Enabled

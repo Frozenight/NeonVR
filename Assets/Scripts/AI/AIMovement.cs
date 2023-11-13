@@ -18,15 +18,14 @@ public class AIMovement : MonoBehaviour
     public Transform player;
     public LayerMask whatIsPlayer, whatIsGround;
 
-    public Vector3 movePoint;
+    public Vector3 patrollingPoint;
     bool movePointSet;
-    public float movePointRange;
+    public float patrollingPointRange;
 
     public float timeBetweenAttacks;
     public bool alreadyAttacked;
 
-    //Might need to change to vison field?
-    public float sightRange, attackRange;
+    public float sightRange, sightAngle, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
     public AIGun gun;
@@ -51,10 +50,8 @@ public class AIMovement : MonoBehaviour
         if (_isDead)
             return;
 
-        //transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
-
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        playerInSightRange = FieldOfViewCheck(sightRange);
+        playerInAttackRange = FieldOfViewCheck(attackRange);
 
         if (!playerInSightRange && !playerInAttackRange)Patrolling();
         if (playerInSightRange && !playerInAttackRange)ChasePlayer();
@@ -62,26 +59,57 @@ public class AIMovement : MonoBehaviour
 
     }
 
+    private bool FieldOfViewCheck(float range)
+    {
+        bool canSeePlayer;
+        Collider[] rangeChecks = Physics.OverlapSphere(gun.transform.position, range, whatIsPlayer);
+
+        if (rangeChecks.Length != 0)
+        {
+            Transform target = rangeChecks[0].transform;
+            //Makes sure the raycast goes straight to the player and not the ground below
+            Vector3 position = new Vector3(target.position.x, target.position.y + 1f, target.position.z);
+            Vector3 directionToTarget = (position - gun.transform.position).normalized;
+
+            if (Vector3.Angle(gun.transform.forward, directionToTarget) < sightAngle / 2)
+            {
+                float distanceToTarget = Vector3.Distance(gun.transform.position, target.position);
+
+                //Debug.DrawRay(gun.transform.position, directionToTarget * distanceToTarget, Color.yellow);
+                if (!Physics.Raycast(gun.transform.position, directionToTarget, distanceToTarget, whatIsGround))
+                    canSeePlayer = true;
+                else
+                    canSeePlayer = false;
+            }
+            else
+                canSeePlayer = false;
+        }
+        else
+            canSeePlayer = false;
+
+        return canSeePlayer;
+    }
+
     private void Patrolling()
     {
-        if(!movePointSet) SearchMovePoint();
+        if(!movePointSet) SearchPatrollingPoint();
 
         if(movePointSet)
-            agent.SetDestination(movePoint);
+            agent.SetDestination(patrollingPoint);
 
-        Vector3 distanceToMovePoint = transform.position - movePoint;
+        Vector3 distanceToMovePoint = transform.position - patrollingPoint;
 
         if(distanceToMovePoint.magnitude < 1f)
             movePointSet = false;
     }
-    private void SearchMovePoint() 
+    private void SearchPatrollingPoint() 
     {
-        float randomZ = Random.Range(-movePointRange, movePointRange);
-        float randomX = Random.Range(-movePointRange, movePointRange);
+        float randomZ = Random.Range(-patrollingPointRange, patrollingPointRange);
+        float randomX = Random.Range(-patrollingPointRange, patrollingPointRange);
 
-        movePoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        patrollingPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(movePoint, -transform.up, 2f, whatIsGround))
+        if (Physics.Raycast(patrollingPoint, -transform.up, 2f, whatIsGround))
             movePointSet = true;
     }
 

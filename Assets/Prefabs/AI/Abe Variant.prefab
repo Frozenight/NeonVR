@@ -373,11 +373,12 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1
-  movePoint: {x: 0, y: 0, z: 0}
-  movePointRange: 0
+  patrollingPoint: {x: 0, y: 0, z: 0}
+  patrollingPointRange: 10
   timeBetweenAttacks: 0
   alreadyAttacked: 0
-  sightRange: 1000
+  sightRange: 50
+  sightAngle: 150
   attackRange: 5
   playerInSightRange: 0
   playerInAttackRange: 0
