@@ -40,6 +40,7 @@ public class EnemyManager : MonoBehaviour
     }
     private void UpdateText()
     {
+        if (textMesh != null)
         textMesh.text = $"Remaining enemies:\n{enemyCount}";
     }
 }
