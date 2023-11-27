@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,7 +17,7 @@ public class AIMovement : MonoBehaviour
 
     public NavMeshAgent agent;
     public Transform player;
-    public LayerMask whatIsPlayer, whatIsGround;
+    public LayerMask whatIsPlayer, whatIsGround, whatIsWater;
 
     public Vector3 patrollingPoint;
     bool movePointSet;
@@ -29,6 +30,10 @@ public class AIMovement : MonoBehaviour
     public bool playerInSightRange, playerInAttackRange;
 
     public AIGun gun;
+
+    GameObject hips;
+    private bool ragdolled;
+
     void Start()
     {
         rigColliders = GetComponentsInChildren<Collider>();
@@ -36,7 +41,7 @@ public class AIMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         StopRagdoll();
         mainCollider.enabled = true;
-
+        hips = this.gameObject.GetNamedChild("mixamorig:Hips");
     }
     private void Awake()
     {
@@ -49,14 +54,15 @@ public class AIMovement : MonoBehaviour
     {
         if (_isDead)
             return;
-
+        
+        if(!ragdolled) { 
         playerInSightRange = FieldOfViewCheck(sightRange);
         playerInAttackRange = FieldOfViewCheck(attackRange);
 
         if (!playerInSightRange && !playerInAttackRange)Patrolling();
         if (playerInSightRange && !playerInAttackRange)ChasePlayer();
         if (playerInSightRange && playerInAttackRange)AttackPlayer();
-
+        }
     }
 
     private bool FieldOfViewCheck(float range)
@@ -113,17 +119,53 @@ public class AIMovement : MonoBehaviour
             movePointSet = true;
     }
 
-    public void getBlasted(float blastForce, Vector3 explosionPosition, float blastRadius, float upwardModifier)
+    private void Kill()
     {
         _isDead = true;
         anim.enabled = false;
         agent.enabled = false;
         StartRagdoll();
+        Destroy(gameObject, 5);
+    }
+
+    public IEnumerator getBlasted(float blastForce, Vector3 explosionPosition, float blastRadius, float upwardModifier)
+    {
+        anim.enabled = false;
+        agent.enabled = false;
+        ragdolled = true;
+        StartRagdoll();
+        //temp
+        explosionPosition.z += 1.5f;
+        explosionPosition.y += 0.1f;
+        
+        
         foreach (Rigidbody rb in rigRigidbodies)
         {
             rb.AddExplosionForce(blastForce, explosionPosition, blastRadius, upwardModifier, ForceMode.Impulse);
         }
-        Destroy(gameObject, 5);
+
+        yield return new WaitForSeconds(1f);
+        Rigidbody body = hips.GetComponent<Rigidbody>();
+
+        while (body.velocity.y > 0.1f || body.velocity.x > 0.1f && body.velocity.z > 0.1f)
+        {
+            if (hips.transform.position.y < -2)
+            {
+                Kill();
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
+        if (hips.transform.position.y < -2)
+        {
+            Kill();
+        }
+        else { 
+        this.transform.position = body.position;
+        anim.enabled = true;
+        agent.enabled = true;
+        ragdolled = false;
+        StopRagdoll();
+        }
     }
 
     private void ChasePlayer()
