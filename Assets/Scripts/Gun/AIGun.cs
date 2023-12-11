@@ -12,6 +12,7 @@ public class AIGun : MonoBehaviour
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private float bulletSpeed = 0.5f;
     [SerializeField] private BulletImpact effectObject;
+    public AudioSource shootSound;
 
     private float elapsedTime = 0f;
 
@@ -30,6 +31,7 @@ public class AIGun : MonoBehaviour
             return;
         ShootBullet(player);
         _canShoot = false;
+        shootSound.Play();
         Invoke("LoadWeapon", reloadTime);
     }
 

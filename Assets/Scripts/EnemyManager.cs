@@ -41,7 +41,6 @@ public class EnemyManager : MonoBehaviour
         if (enemyHolder == null)
             enemyHolder = GameObject.Find("Enemies");
         enemyCount = enemyHolder.transform.childCount;
-        Debug.Log(enemyCount);
         UpdateText();
         if (enemyCount == 0)
         {

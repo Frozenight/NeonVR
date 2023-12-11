@@ -11,7 +11,9 @@ public class AIMovement : MonoBehaviour
     public GameObject[] Trails;
     Collider[] rigColliders;
     Rigidbody[] rigRigidbodies;
+    public Rigidbody mainRb;
     public Collider mainCollider;
+    public Collider capsuleCollider;
 
     private bool _isDead = false;
     private Animator anim;
@@ -31,6 +33,7 @@ public class AIMovement : MonoBehaviour
     public bool playerInSightRange, playerInAttackRange;
 
     public AIGun gun;
+    private bool agentActive = true;
     void Start()
     {
         rigColliders = GetComponentsInChildren<Collider>();
@@ -45,6 +48,8 @@ public class AIMovement : MonoBehaviour
         player = FindFirstObjectByType<PlayerBody>().transform;
         gun = this.GetComponentInChildren<AIGun>();
         agent = GetComponent<NavMeshAgent>();
+        if (!agent.enabled)
+            agentActive = false;
         enemyManager = FindFirstObjectByType<EnemyManager>();
     }
 
@@ -59,7 +64,6 @@ public class AIMovement : MonoBehaviour
         if (!playerInSightRange && !playerInAttackRange) Patrolling();
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
         if (playerInSightRange && playerInAttackRange) AttackPlayer();
-
     }
 
     private bool FieldOfViewCheck(float range)
@@ -97,7 +101,7 @@ public class AIMovement : MonoBehaviour
     {
         if (!movePointSet) SearchPatrollingPoint();
 
-        if (movePointSet)
+        if (movePointSet && agentActive)
             agent.SetDestination(patrollingPoint);
 
         Vector3 distanceToMovePoint = transform.position - patrollingPoint;
@@ -131,10 +135,12 @@ public class AIMovement : MonoBehaviour
 
     private void ChasePlayer()
     {
+        if (agentActive)
         agent.SetDestination(player.position);
     }
     private void AttackPlayer()
     {
+        if (agentActive)
         agent.SetDestination(transform.position);
         transform.LookAt(player);
 
@@ -156,10 +162,12 @@ public class AIMovement : MonoBehaviour
     {
         foreach (Rigidbody rb in rigRigidbodies)
         {
+            if (rb != mainRb)
             rb.isKinematic = false;
         }
         foreach (Collider col in rigColliders)
         {
+            if (col != capsuleCollider)
             col.enabled = true;
         }
     }
@@ -168,11 +176,13 @@ public class AIMovement : MonoBehaviour
     {
         foreach (Rigidbody rb in rigRigidbodies)
         {
-            rb.isKinematic = true;
+            if (rb != mainRb)
+                rb.isKinematic = true;
         }
         foreach (Collider col in rigColliders)
         {
-            col.enabled = false;
+            if (col != capsuleCollider)
+                col.enabled = false;
         }
     }
 

@@ -19,7 +19,6 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Rigidbody rightHandRb;
 
     [SerializeField] private GameObject[] glovesRb;
-
     private void Start()
     {
         //Invoke("EquipRightGlove", 5);

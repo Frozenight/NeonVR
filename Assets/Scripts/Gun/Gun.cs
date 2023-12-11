@@ -16,6 +16,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private float bulletSpeed = 0.5f;
     [SerializeField] private BulletImpact effectObject;
 
+    public AudioSource shootSound;
+
     private float endScale = 0.02f;
 
     private float elapsedTime = 0f;
@@ -40,6 +42,7 @@ public class Gun : MonoBehaviour
         _canShoot = false;
         indicationMat.color = Color.red;
         DischargeMaterials();
+        shootSound.Play();
         Invoke("LoadWeapon", reloadTime);
     }
 

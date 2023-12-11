@@ -15,6 +15,7 @@ public class Grabber : MonoBehaviour
     [SerializeField] private float bulletSpeed = 0.5f;
     [SerializeField] private BulletImpact effectObject;
 
+    public AudioSource shootSound;
     private float endScale = 0.02f;
 
     private float elapsedTime = 0f;
@@ -37,6 +38,7 @@ public class Grabber : MonoBehaviour
         ShootBullet();
         _canShoot = false;
         indicationMat.color = Color.red;
+        shootSound.Play();
         DischargeMaterials();
         Invoke("LoadWeapon", reloadTime);
     }
