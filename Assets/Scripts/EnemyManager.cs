@@ -8,10 +8,22 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private Animator animator = null;
     [SerializeField] private TMP_Text textMesh = null;
+    [SerializeField] private GameObject enemyHolder;
     private int enemyCount;
     private float searchCountdown = 1f;
     private bool levelFinished=false;
+
+    private void Start()
+    {
+        EnemyIsAlive();
+    }
+
     private void Update()
+    {
+        CheckForEndLevel();
+    }
+
+    public void CheckForEndLevel()
     {
         if (!EnemyIsAlive() && !levelFinished)
         {
@@ -19,22 +31,21 @@ public class EnemyManager : MonoBehaviour
             OpenDoors();
         }
     }
+
     private void OpenDoors()
     {
         animator.Play("EndDoorAnimation", 0, 0.0f);
     }
     private bool EnemyIsAlive()
     {
-        searchCountdown-=Time.deltaTime;
-        if(searchCountdown<=0)
+        if (enemyHolder == null)
+            enemyHolder = GameObject.Find("Enemies");
+        enemyCount = enemyHolder.transform.childCount;
+        Debug.Log(enemyCount);
+        UpdateText();
+        if (enemyCount == 0)
         {
-            searchCountdown = 1f;
-            enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
-            UpdateText();
-            if (enemyCount == 0)
-            {
-                return false;
-            }
+            return false;
         }
         return true;
     }

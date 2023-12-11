@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class UILookAt : MonoBehaviour
 {
+    public Transform player;
+
     private void LateUpdate()
     {
-        transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
+        transform.LookAt(player);
+        transform.Rotate(0, 180, 0);
     }
 }

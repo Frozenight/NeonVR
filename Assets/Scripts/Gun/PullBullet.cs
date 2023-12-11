@@ -28,6 +28,8 @@ public class PullBullet : MonoBehaviour
     void PullObject(Transform target)
     {
         Vector3 pullDirection = (shotPosition - target.position).normalized;
+        if (target.GetComponent<AIMovement>())
+            target.GetComponent<AIMovement>().ActivateTrails();
         StartCoroutine(PullCoroutine(target, pullDirection));
     }
 

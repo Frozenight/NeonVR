@@ -27,7 +27,7 @@ public class Grabber : MonoBehaviour
     {
         chargeVFX.SetActive(false);
         LoadWeapon();
-       // InvokeRepeating("Shoot", 0, 5);
+        //InvokeRepeating("Shoot", 0, 5);
     }
 
     public void Shoot()

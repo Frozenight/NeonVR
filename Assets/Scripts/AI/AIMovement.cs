@@ -6,7 +6,9 @@ using UnityEngine.AI;
 public class AIMovement : MonoBehaviour
 {
     public float rotationSpeed = 30.0f; // Adjust the speed of rotation as needed
+    private EnemyManager enemyManager;
 
+    public GameObject[] Trails;
     Collider[] rigColliders;
     Rigidbody[] rigRigidbodies;
     public Collider mainCollider;
@@ -43,6 +45,7 @@ public class AIMovement : MonoBehaviour
         player = FindFirstObjectByType<PlayerBody>().transform;
         gun = this.GetComponentInChildren<AIGun>();
         agent = GetComponent<NavMeshAgent>();
+        enemyManager = FindFirstObjectByType<EnemyManager>();
     }
 
     void Update()
@@ -119,11 +122,11 @@ public class AIMovement : MonoBehaviour
         anim.enabled = false;
         agent.enabled = false;
         StartRagdoll();
+        Destroy(gameObject, 5);
         foreach (Rigidbody rb in rigRigidbodies)
         {
             rb.AddExplosionForce(blastForce, explosionPosition, blastRadius, upwardModifier, ForceMode.Impulse);
         }
-        Destroy(gameObject, 5);
     }
 
     private void ChasePlayer()
@@ -171,5 +174,19 @@ public class AIMovement : MonoBehaviour
         {
             col.enabled = false;
         }
+    }
+
+    public void ActivateTrails()
+    {
+        StartCoroutine(startTrails());
+    }
+
+    private IEnumerator startTrails()
+    {
+        Trails[0].GetComponent<TrailRenderer>().enabled = true;
+        Trails[1].GetComponent<TrailRenderer>().enabled = true;
+        yield return new WaitForSeconds(3);
+        Trails[0].GetComponent<TrailRenderer>().enabled = false;
+        Trails[1].GetComponent<TrailRenderer>().enabled = false;
     }
 }
